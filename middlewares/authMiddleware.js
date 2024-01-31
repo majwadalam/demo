@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-
- exports.authMiddleware = async (req, res, next) => {
+exports.authMiddleware = async (req, res, next) => {
   try {
     // Check if authorization header is present
     const authHeader = req.headers.authorization;
@@ -31,11 +30,11 @@ const User = require("../models/User");
   }
 };
 
- exports.isAdmin = (req, res, next) => {
-    if (req.user && req.user.isAdmin) {
-      next();
-    } else {
-      res.status(401).json({ message: 'Not authorized as an admin' });
-    }
-  };
-  
+exports.isAdmin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(401).json({ message: 'Not authorized as an admin' });
+  }
+};
+

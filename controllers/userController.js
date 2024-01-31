@@ -9,7 +9,7 @@ const JWT_SECRET = 'secret';
 exports.register = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
-    
+
     // Check if user already exists
     const userExists = await User.findOne({ email });
     if (userExists) {

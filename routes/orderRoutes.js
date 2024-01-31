@@ -3,11 +3,8 @@ const router = express.Router();
 const orderController = require('../controllers/orderController');
 const auth = require("../middlewares/authMiddleware");
 
-
-
-
 // route for updating order 
-router.put('/orders/:orderId/status',auth.authMiddleware,auth.isAdmin,orderController.updateOrderStatus);
+router.put('/orders/:orderId/status', auth.authMiddleware, auth.isAdmin, orderController.updateOrderStatus);
 router.post('/create-guest-payment-intent', orderController.createGuestPaymentIntent);
 // Route for creating a new order
 router.post('/createorder', orderController.createOrder);
