@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const dotenv = require('dotenv');
+dotenv.config();
 
 exports.authMiddleware = async (req, res, next) => {
   try {
@@ -11,10 +13,13 @@ exports.authMiddleware = async (req, res, next) => {
 
     // Extract token from authorization header
     const token = authHeader.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ message: "Token missing" });
+    }
 
     // Verify token and extract user id
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.id;
+    const userId = decoded.userId;
 
     // Fetch user from database and attach to request object
     const user = await User.findById(userId);

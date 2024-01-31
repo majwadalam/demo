@@ -55,9 +55,12 @@ exports.createBooking = async (req, res) => {
         }
 
         // Calculate number of nights
-        const oneDay = 24 * 60 * 60 * 1000;
+        // Assuming checkIn and checkOut are strings in 'yyyy-mm-dd' format
+        const checkInDate = new Date(checkIn);
+        const checkOutDate = new Date(checkOut);
+
         const numberOfNights = Math.round(
-            Math.abs((checkIn - checkOut) / oneDay)
+            Math.abs((checkInDate.getTime() - checkOutDate.getTime()) / (24 * 60 * 60 * 1000))
         );
 
         // Fetch room price

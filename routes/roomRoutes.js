@@ -5,7 +5,7 @@ const roomController = require('../controllers/room/roomController');
 const auth = require("../middlewares/authMiddleware");
 
 router.route('/')
-    .get(roomController.getRooms)
+    .get(auth.authMiddleware, auth.isAdmin, roomController.getRooms)
     .post(auth.authMiddleware, auth.isAdmin, roomController.createRoom); // { name, description, prizePerNight, image, capacity }
 
 router.route('/:id')
