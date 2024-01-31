@@ -37,10 +37,10 @@ exports.getRoom = async (req, res) => {
 // Create room
 exports.createRoom = async (req, res) => {
     try {
-        const { name, description, pricePerNight, image } = req.body;
+        const { name, description, pricePerNight, image, capacity } = req.body;
 
         // Validate input fields
-        if (!name || !description || !pricePerNight || !image) {
+        if (!name || !description || !pricePerNight || !image || !capacity) {
             return res
                 .status(400)
                 .json({ message: "Please fill out all required fields" });
@@ -62,10 +62,10 @@ exports.updateRoom = async (req, res) => {
             return res.status(404).json({ message: "Room not found" });
         }
 
-        const { name, description, pricePerNight, image } = req.body;
+        const { name, description, pricePerNight, image , capacity} = req.body;
 
         // Validate input fields
-        if (!name || !description || !pricePerNight || !image) {
+        if (!name || !description || !pricePerNight || !image || !capacity) {
             return res
                 .status(400)
                 .json({ message: "Please fill out all required fields" });

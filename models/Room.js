@@ -6,6 +6,7 @@ const roomSchema = new mongoose.Schema(
         image: { type: String, required: true },
         description: { type: String, required: true },
         pricePerNight: { type: Number, required: true },
+        capacity: { type: Number, required: true },
         status: { type: String, enum: ['available', 'unavailable'], default: 'available' }
     },
     {
