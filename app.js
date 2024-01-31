@@ -15,13 +15,20 @@ const roomRoutes = require('./routes/roomRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 
-require('dotenv').config()
-
 const corsOptions = {
   origin: [
     "http://localhost:3000",
+    
   ],
+  credentials:"true", 
+  optionSuccessStatus:200
 };
+
+app.use(cors(corsOptions));
+
+require('dotenv').config()
+
+
 
 app.use(cors(corsOptions));
 
@@ -55,4 +62,4 @@ mongoose
 
 // Start the server
 
-app.listen(process.env.PORT || 5000, () => console.log(`running on port ${process.env.PORT || 5000}`));
+app.listen(process.env.PORT || 3001, () => console.log(`running on port ${process.env.PORT || 3001}`));

@@ -133,40 +133,42 @@ exports.deleteProductById = async (req, res) => {
 
 // Function to search for products with pagination
 exports.getProducts = async (req, res) => {
-  const { searchTerm, page, limit } = req.query;
-  const searchRegex = new RegExp(searchTerm, 'i'); // Case-insensitive search regex
-
-  // Create query object with pagination and search criteria
-  const query = { title: { $regex: searchRegex } };
-  const options = {
-    skip: (parseInt(page) - 1) * parseInt(limit),
-    limit: parseInt(limit)
-  };
-
   try {
-    // Fetch products from the database based on the search criteria and pagination options
-    const products = await Product.find(query, null, options).exec();
-    const totalProducts = await Product.countDocuments(query).exec();
+    // Extract query parameters from the request
+    const { category, sortBy, sortOrder, page = 1, pageSize = 10, searchTerm } = req.query;
 
+    // Construct the MongoDB query based on the provided parameters
+    const query = {};
+    if (category) {
+      query.category = category;
+    }
 
-    res.status(200).json({
-      success: true,
-      message: 'Products retrieved successfully',
-      data: products,
-      total: totalProducts
-    });
-    console.log(products, "these are products");
+    // Add search term to query if provided
+    if (searchTerm) {
+      query.$or = [
+        { title: { $regex: searchTerm, $options: 'i' } },
+        { description: { $regex: searchTerm, $options: 'i' } },
+      ];
+    }
 
+    // Add sorting options if provided
+    const sortOptions = {};
+    if (sortBy) {
+      sortOptions[sortBy] = sortOrder === 'desc' ? -1 : 1;
+    }
+
+    // Calculate skip value for pagination
+    const skip = (page - 1) * pageSize;
+
+    // Fetch products with pagination from the database
+    const products = await Product.find(query).sort(sortOptions).skip(skip).limit(Number(pageSize));
+
+    res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to retrieve products',
-      error: error.message
-    });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-
 exports.uploadImages = async (req, res) => {
   try {
     const imageUrls = []; // Array to store image URLs
