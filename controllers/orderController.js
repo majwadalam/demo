@@ -83,9 +83,7 @@ exports.updateOrderStatus = async( req,res) => {
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
     }
-    if (order.paymentStatus !== 'paid') {
-      return res.status(400).json({ error: 'Order has not been paid yet' });
-    }
+  
     order.status = status;
     await order.save();
     res.json({ message: 'Order status updated successfully' });
@@ -239,14 +237,3 @@ exports.getAllOrdersCount = async (req, res) => {
   }
 };
 
-exports.getProductsCount = async (req, res) => {
-  try {
-    // Get the total number of products
-    const totalProductsCount = await Product.countDocuments();
-
-    res.json({ totalProductsCount });
-  } catch (error) {
-    console.error('Error getting products count:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
