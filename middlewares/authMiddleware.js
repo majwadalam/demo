@@ -17,6 +17,9 @@ exports.authMiddleware = async (req, res, next) => {
       return res.status(401).json({ message: "Token missing" });
     }
 
+    console.log(token, " this token");
+    
+
     // Verify token and extract user id
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;

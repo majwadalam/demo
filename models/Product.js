@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const validCategories = ["appetizers", "main courses", "drinks", "desserts"];
+
 const ProductSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -9,9 +11,9 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   }],
-  description : { 
-    type : String, 
-    required : true,
+  description: {
+    type: String,
+    required: true,
   },
   prices: {
     type: [Number],
@@ -20,13 +22,14 @@ const ProductSchema = new mongoose.Schema({
   extraOptions: {
     type: [
       {
-        text: { type: String},
-        price: { type: Number},
+        text: { type: String },
+        price: { type: Number },
       },
     ],
   },
   category: {
     type: String,
+    enum: validCategories,
   },
 });
 

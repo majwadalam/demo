@@ -5,9 +5,8 @@ const auth = require("../middlewares/authMiddleware");
 
 // route for updating order 
 router.put('/orders/:orderId/status', auth.authMiddleware, auth.isAdmin, orderController.updateOrderStatus);
-router.post('/create-guest-payment-intent', orderController.createGuestPaymentIntent);
 // Route for creating a new order
-router.post('/createorder', orderController.createOrder);
+router.post('/createorder',auth.authMiddleware,orderController.createOrder);
 
 // Route for retrieving all orders
 router.get('/getorders', orderController.getallOrders);

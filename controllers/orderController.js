@@ -136,43 +136,47 @@ exports.getallOrders = async(req,res) =>  {
 };
 
 
-exports.createOrder = async (req,res) => { 
+exports.createOrder = async (req, res) => {
   try {
-    const { products, extraOptions, total, paymentMethod, email, clientSecret } = req.body;
+    const {
+      products,
+      extraOptions,
+      paymentMethod,
+      email,
+      size,
+    } = req.body;
 
-    let order;
+    // Calculate total price including products and extraOptions
+    let totalPrice = 0;
 
-    if (paymentMethod === 'cod') {
-      order = await Order.create({ products, extraOptions, total, email });
-      return res.status(201).json(order);
+    // Calculate total price for products
+    for (const product of products) {
+      totalPrice += product.price * product.quantity;
     }
 
-    if (paymentMethod === 'stripe') {
-      const paymentIntent = await stripe.paymentIntents.retrieve(clientSecret);
-
-      if (paymentIntent.status === 'succeeded') {
-        order = await Order.create({ products, extraOptions, total, email });
-        return res.status(201).json(order);
-      }
-
-      const payment = await stripe.paymentIntents.create({
-        amount: total * 100,
-        currency: 'usd',
-        payment_method: paymentIntent.payment_method,
-        receipt_email: email,
-      
-      });
-
-      if (payment.status === 'succeeded') {
-        order = await Order.create({ products, extraOptions, total, email });
-        return res.status(201).json(order);
-      }
+    // Calculate total price for extraOptions
+    for (const option of extraOptions) {
+      totalPrice += option.price * option.quantity;
     }
 
-    return res.status(400).json({ error: 'Invalid payment method' });
+    // Create the order object
+    const order = new Order({
+      products,
+      extraOptions,
+      paymentMethod,
+      email,
+      size,
+      totalPrice,
+      status: 'preparing', // Set default status to "preparing"
+      userId: req.user._id, // Assuming you have authentication middleware setting req.user
+    });
+
+    // Save the order to the database
+    const savedOrder = await order.save();
+
+    res.status(201).json(savedOrder);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    console.error('Error creating order:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-

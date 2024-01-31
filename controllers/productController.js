@@ -116,13 +116,17 @@ exports.updateProductById = async (req, res) => {
 
 exports.deleteProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const productId = req.params.id;
+
+    // Check if the product with the given ID exists
+    const product = await Product.findById(productId);
 
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    await product.remove();
+    // Remove the product from the database
+    await Product.findByIdAndDelete(productId);
 
     res.json({ message: 'Product removed' });
   } catch (err) {
@@ -130,6 +134,7 @@ exports.deleteProductById = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 // Function to search for products with pagination
 exports.getProducts = async (req, res) => {

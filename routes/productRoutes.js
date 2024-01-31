@@ -26,5 +26,5 @@ router.post('/upload', upload.array('images'), productController.uploadImages);
 
 router.get('/getproducts', productController.getProducts);
 
-
+//http://localhost:3001/api/products/getProducts?&page=2&pageSize=10//
 module.exports = router;

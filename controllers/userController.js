@@ -1,9 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const saltRounds = 10;
-const JWT_SECRET = 'secret';
 
 // Register new user
 exports.register = async (req, res) => {
@@ -30,7 +31,7 @@ exports.register = async (req, res) => {
     // Create JWT token
     const token = jwt.sign(
       { userId: user._id, isAdmin: user.isAdmin },
-      JWT_SECRET,
+      process.env.JWT_SECRET,
       { expiresIn: '30d' },
     );
 
@@ -61,7 +62,7 @@ exports.login = async (req, res) => {
     // Create JWT token
     const token = jwt.sign(
       { userId: user._id, isAdmin: user.isAdmin },
-      JWT_SECRET,
+      process.env.JWT_SECRET,
       { expiresIn: '30d' },
     );
 
