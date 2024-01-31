@@ -2,13 +2,13 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const cors = require("cors"); 
+const cors = require("cors");
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config();
 
 // routes 
-const userRoutes = require("./routes/userRoutes"); 
+const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require('./routes/orderRoutes');
 const roomRoutes = require('./routes/roomRoutes');
@@ -25,10 +25,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Routes
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/users', userRoutes); 
+app.use('/api/users', userRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/bookings', bookingRoutes);
- 
+
+// Error handler
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
 // Connect to the database
 mongoose
   .connect(process.env.MONGO_URL, {
