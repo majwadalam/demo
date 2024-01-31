@@ -13,6 +13,7 @@ const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require('./routes/orderRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 require('dotenv').config()
 app.use(cors())
@@ -28,6 +29,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/bookings', bookingRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Error handler
 app.get('/', (req, res) => {
