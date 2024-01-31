@@ -98,18 +98,25 @@ exports.updateOrderStatus = async( req,res) => {
 }
 
 
-exports.getallOrders = async(req,res) =>  { 
-
+exports.getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find();
+    const { page = 1, pageSize = 10 } = req.query;
+
+    // Calculate skip value for pagination
+    const skip = (page - 1) * pageSize;
+
+    // Fetch orders with pagination from the database
+    const orders = await Order.find()
+      .sort({ createdAt: -1 }) // Sort by creation date in descending order
+      .skip(skip)
+      .limit(Number(pageSize));
+
     res.status(200).json(orders);
-  } catch (err) {
-    
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-
-
-}
+};
 
 
  exports.createGuestPaymentIntent = async (req,res) => {
@@ -177,6 +184,69 @@ exports.createOrder = async (req, res) => {
     res.status(201).json(savedOrder);
   } catch (error) {
     console.error('Error creating order:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+exports.editOrderStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    // Validate that the status is one of the allowed values
+    const allowedStatusValues = ['preparing', 'shipped', 'delivered'];
+    if (!allowedStatusValues.includes(status)) {
+      return res.status(400).json({ error: 'Invalid status value' });
+    }
+    // Find the order by ID and update its status
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { $set: { status } },
+      { new: true } // Return the modified order
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    res.json(updatedOrder);
+  } catch (error) {
+    console.error('Error editing order status:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+exports.getOrdersByUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Find orders by user ID
+    const userOrders = await Order.find({ userId });
+
+    res.json(userOrders);
+  } catch (error) {
+    console.error('Error getting orders by user:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+exports.getAllOrdersCount = async (req, res) => {
+  try {
+    // Get the total number of orders
+    const totalOrdersCount = await Order.countDocuments();
+
+    res.json({ totalOrdersCount });
+  } catch (error) {
+    console.error('Error getting all orders count:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+exports.getProductsCount = async (req, res) => {
+  try {
+    // Get the total number of products
+    const totalProductsCount = await Product.countDocuments();
+
+    res.json({ totalProductsCount });
+  } catch (error) {
+    console.error('Error getting products count:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

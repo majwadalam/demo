@@ -191,3 +191,15 @@ exports.uploadImages = async (req, res) => {
     res.status(500).json({ success: false, error: 'Failed to upload images' });
   }
 };
+
+exports.getProductsCount = async (req, res) => {
+  try {
+    // Get the total number of products
+    const totalProductsCount = await Product.countDocuments();
+
+    res.json({ totalProductsCount });
+  } catch (error) {
+    console.error('Error getting products count:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
