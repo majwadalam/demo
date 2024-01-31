@@ -125,13 +125,13 @@ exports.updateBooking = async (req, res) => {
         const total = pricePerNight * numberOfNights;
 
         // Update booking
-        const updatedBooking = await Booking.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true }
-        );
+        booking.room = room;
+        booking.checkIn = checkIn;
+        booking.checkOut = checkOut;
+        booking.total = total;
+        await booking.save();
 
-        res.status(200).json({ booking: updatedBooking });
+        res.status(200).json({ booking: booking });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });

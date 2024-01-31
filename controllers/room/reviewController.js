@@ -37,8 +37,7 @@ exports.getReview = async (req, res) => {
 // Create review
 exports.createReview = async (req, res) => {
     try {
-        const { rating, comment } = req.body;
-        const { bookingId } = req.params;
+        const { rating, comment, bookingId } = req.body;
         const user = req.user._id;
 
         // Validate input fields

@@ -12,7 +12,7 @@ const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require('./routes/orderRoutes');
 const roomRoutes = require('./routes/roomRoutes');
-// const bookingRoutes = require('./routes/bookingRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
 
 require('dotenv').config()
 app.use(cors())
@@ -27,7 +27,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes); 
 app.use('/api/rooms', roomRoutes);
-// app.use('/api/bookings', bookingRoutes);
+app.use('/api/bookings', bookingRoutes);
  
 // Connect to the database
 mongoose

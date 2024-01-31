@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
-const bookingController = require('../controllers/room/bookingsController');
+const bookingController = require('../controllers/room/bookingController');
 const auth = require("../middlewares/authMiddleware");
 
 router.route('/')
-    .get(bookingController.getAllBookings)
-    .post(auth.authMiddleware, bookingController.createBooking);
+    .get(bookingController.getBookings)
+    .post(auth.authMiddleware, bookingController.createBooking); // { room, checkIn, checkOut }
 
 router.route('/:id')
-    .get(bookingController.getBookingById)
-    .put(auth.authMiddleware, bookingController.updateBookingById)
-    .delete(auth.authMiddleware, bookingController.deleteBookingById);
+    .get(bookingController.getBooking)
+    .put(auth.authMiddleware, bookingController.updateBooking) // { room, checkIn, checkOut }
+    .delete(auth.authMiddleware, bookingController.deleteBooking);
 
 router.route('/check-in/:id')
     .put(auth.authMiddleware, bookingController.checkin);
