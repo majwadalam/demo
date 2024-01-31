@@ -16,7 +16,12 @@ const bookingRoutes = require('./routes/bookingRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 
 require('dotenv').config()
-app.use(cors())
+app.use(cors(
+  {
+    origin: 'http://localhost:3000',
+    credentials: true
+  }
+))
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(morgan('tiny'));
