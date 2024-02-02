@@ -18,7 +18,7 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const corsOptions = {
   origin: [
     "http://localhost:3000",
-    
+"https://demo-three-navy.vercel.app"    
   ],
   credentials:"true", 
   optionSuccessStatus:200
