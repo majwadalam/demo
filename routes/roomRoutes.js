@@ -5,12 +5,12 @@ const roomController = require('../controllers/room/roomController');
 const auth = require("../middlewares/authMiddleware");
 
 router.route('/')
-    .get(auth.authMiddleware, auth.isAdmin, roomController.getRooms)
-    .post(auth.authMiddleware, auth.isAdmin, roomController.createRoom); // { name, description, prizePerNight, image, capacity }
+    .get( roomController.getRooms)
+    .post( roomController.createRoom); // { name, description, prizePerNight, image, capacity }
 
 router.route('/:id')
     .get(roomController.getRoom)
-    .put(auth.authMiddleware, auth.isAdmin, roomController.updateRoom) // { name, description, prizePerNight, image, capacity }
-    .delete(auth.authMiddleware, auth.isAdmin, roomController.deleteRoom);
+    .put( roomController.updateRoom) // { name, description, prizePerNight, image, capacity }
+    .delete(roomController.deleteRoom);
 
 module.exports = router;
