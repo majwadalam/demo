@@ -11,6 +11,8 @@ exports.authMiddleware = async (req, res, next) => {
       return res.status(401).json({ message: "Authorization header missing" });
     }
 
+    console.log(authHeader, " this is authHeader"); 
+    
     // Extract token from authorization header
     const token = authHeader.split(" ")[1];
     if (!token) {
@@ -18,7 +20,7 @@ exports.authMiddleware = async (req, res, next) => {
     }
 
     console.log(token, " this token");
-    
+
     
 
     // Verify token and extract user id

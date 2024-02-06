@@ -223,3 +223,23 @@ exports.checkout = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+exports.getuserbookings = async (req, res) => { 
+    try {
+        const id = req.user.id;
+        console.log(id, " this is id")
+        // Query bookings with the provided user ID and populate the 'room' field
+        const bookings = await Booking.find({ user: id }).populate('room').exec();
+        
+        // Check if bookings array is empty
+        if (bookings.length === 0) {
+            return res.status(404).json({ message: "No bookings found for the provided user ID." });
+        }
+        
+        // Sending the bookings array as a response
+        return res.status(200).json(bookings);
+    } catch (error) {
+        console.error('Error fetching bookings:', error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}

@@ -7,9 +7,12 @@ const auth = require("../middlewares/authMiddleware");
 router.route('/')
     .get(bookingController.getBookings)
     .post(auth.authMiddleware, bookingController.createBooking); // { room, checkIn, checkOut }
+  
+    router.get("/getuserbookings", auth.authMiddleware, bookingController.getuserbookings);
+
+
 
 router.route('/:id')
-    .get(bookingController.getBooking)
     .put(auth.authMiddleware, bookingController.updateBooking) // { room, checkIn, checkOut }
     .delete(auth.authMiddleware, bookingController.deleteBooking);
 
@@ -21,5 +24,7 @@ router.route('/check-out/:id')
 
 router.route('/cancel')
     .put(auth.authMiddleware, bookingController.cancelBooking);
+
+
 
 module.exports = router;
