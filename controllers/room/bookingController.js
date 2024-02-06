@@ -14,12 +14,15 @@ const Booking = require("../../models/Booking.js");
 // Get all bookings
 exports.getBookings = async (req, res) => {
     try {
-        const bookings = await Booking.find();
-        res.status(200).json({ bookings });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
-    }
+        // Fetch bookings and populate the 'user' and 'room' fields with corresponding user and room details
+        const bookings = await Booking.find().populate('user').populate('room');
+    
+        res.json({ bookings });
+      } catch (err) {
+        // Handle errors
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
 };
 
 // Get single booking
