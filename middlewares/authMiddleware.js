@@ -19,6 +19,7 @@ exports.authMiddleware = async (req, res, next) => {
 
     console.log(token, " this token");
     
+    
 
     // Verify token and extract user id
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
